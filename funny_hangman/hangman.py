@@ -10,13 +10,13 @@
  ###########
 
 
-import os
+import time
 import random
 
 def build_hangman(hangman, position):
     if position == 1:
         hangman = list(hangman)
-        hangman[46], hangman[38], hangman[30], hangman[22], hangman[14] = "|", "|",  "|", "|", "|"
+        hangman[46], hangman[38], hangman[30], hangman[22], hangman[14] = "|", "|", "|", "|", "|"
         hangman = "".join(hangman)
         return hangman
 
@@ -62,13 +62,6 @@ def build_hangman(hangman, position):
         hangman = "".join(hangman)
         return hangman
 
-#46 38 30 22
-#2 => +; 3 => -; 4 => -; 5 => +;
-#10 => |
-#18 => 0
-#25 => /; 26 => |; 27 => \;
-#33 => /; 35 => \;
-
 def get_words():
     wordlist = []
     file = open('wordlist.txt')
@@ -93,16 +86,20 @@ def play():
 
     while True:
         found = False
-        print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" , wrong_letters)
+        print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", wrong_letters)
         print(hangman)
         print(hidden)
+        char = ""
+
+        if char == word or word == hidden:
+            win = True
+            break
         char = input("Enter a letter: ")
         if char == "":
             print("Enter a valid letter")
+            time.sleep(2)
             continue
-        if char == word:
-            win = True
-            break
+        char = char[0]
 
         for i in range(len(word)):
             if char[0] == word[i]:
@@ -111,7 +108,7 @@ def play():
                 hidden[i] = char[0]
                 hidden = "".join(hidden)
 
-        if found == False:
+        if found == False and char not in wrong_letters:
             wrong_letters.append(char[0])
             if len(wrong_letters) == 9:
                 break
@@ -129,8 +126,8 @@ start = input("Do you now how to play? (y|n) ")
 if start == "n":
     print("An unknown word is drawn at random. Which you have to guess  \nby trying letter by letter. If you know the word, type it in the \nsame field where you typed the letters. \nThen you win!")
 else:
-    print("Let's begin!")
-input()
+    input("Press Enter to start!")
+
 
 while True:
     play()
